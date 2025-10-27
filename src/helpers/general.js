@@ -49,8 +49,12 @@ function isAuth() {
  * 🖼️ Optimize image URL (adds ?imgcdn=true)
  */
 function toOptimizedImage(imageUrl) {
-if (!imageUrl || typeof imageUrl !== 'string') return '';
-  if (!imageUrl.startsWith('/') || imageUrl.includes('imgcdn=true')) return imageUrl;
+  if (typeof imageUrl !== 'string' || !imageUrl) return '';
+  
+  if (!imageUrl.startsWith('/') || imageUrl.includes('imgcdn=true')) {
+    return imageUrl;
+  }
+
   return imageUrl + (imageUrl.includes('?') ? '&' : '?') + 'imgcdn=true';
 }
 
