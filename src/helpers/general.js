@@ -38,16 +38,18 @@ function isEmpty(input) {
  */
 function isAuth() {
   if (typeof window === 'undefined') {
-    return false; // غير true أثناء SSR
+    // أثناء الـ build (SSR) نتفادى الخطأ بإرجاع true مؤقتًا
+    return true;
   }
 
-  const token = window.localStorage?.getItem('key');
-  return !!token;
+  try {
+    const token = window.localStorage?.getItem('key');
+    return !!token;
+  } catch (e) {
+    return false;
+  }
 }
 
-/**
- * 🖼️ Optimize image URL (adds ?imgcdn=true)
- */
 /**
  * 🖼️ Optimize image URL (adds ?imgcdn=true)
  */
