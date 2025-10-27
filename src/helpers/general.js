@@ -37,12 +37,12 @@ function isEmpty(input) {
  * (Looks for 'key' in localStorage)
  */
 function isAuth() {
-  const isBrowser = typeof window !== 'undefined';
-  if (isBrowser) {
-    const token = window.localStorage.getItem('key');
-    return !!token; // true if token exists, false if not
+  if (typeof window === 'undefined') {
+    return false; // غير true أثناء SSR
   }
-  return true; // if not in browser (e.g. during SSR), assume true
+
+  const token = window.localStorage?.getItem('key');
+  return !!token;
 }
 
 /**
