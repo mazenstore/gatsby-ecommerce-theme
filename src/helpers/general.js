@@ -37,13 +37,12 @@ function isEmpty(input) {
  * (Looks for 'key' in localStorage)
  */
 function isAuth() {
-  // ✅ نحمي من السيرفر اللي مفيهوش window
   if (typeof window === 'undefined') {
-    return false;
+    return false; // السيرفر مفيهوش localStorage
   }
 
   try {
-    const token = window.localStorage.getItem('key');
+    const token = window?.localStorage?.getItem('key');
     return !!token;
   } catch (e) {
     return false;
