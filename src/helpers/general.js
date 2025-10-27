@@ -48,14 +48,20 @@ function isAuth() {
 /**
  * 🖼️ Optimize image URL (adds ?imgcdn=true)
  */
+/**
+ * 🖼️ Optimize image URL (adds ?imgcdn=true)
+ */
 function toOptimizedImage(imageUrl) {
-  if (typeof imageUrl !== 'string' || !imageUrl) return '';
-  
-  if (!imageUrl.startsWith('/') || imageUrl.includes('imgcdn=true')) {
+  // إذا القيمة غير موجودة أو ليست string
+  if (!imageUrl || typeof imageUrl !== 'string') return '';
+
+  // نحمي ضد undefined أو مسارات خارجية
+  if (imageUrl?.startsWith('/') === false || imageUrl?.includes('imgcdn=true')) {
     return imageUrl;
   }
 
-  return imageUrl + (imageUrl.includes('?') ? '&' : '?') + 'imgcdn=true';
+  // نضيف imgcdn=true بشكل آمن
+  return imageUrl + (imageUrl?.includes('?') ? '&' : '?') + 'imgcdn=true';
 }
 
 /**
