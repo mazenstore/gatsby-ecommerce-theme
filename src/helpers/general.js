@@ -38,14 +38,13 @@ function isEmpty(input) {
  */
 function isAuth() {
   if (typeof window === 'undefined') {
-    // أثناء الـ build (SSR) نتفادى الخطأ بإرجاع true مؤقتًا
-    return true;
+    return false; // السيرفر مفيهوش localStorage
   }
 
   try {
     const token = window.localStorage?.getItem('key');
     return !!token;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
