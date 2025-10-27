@@ -15,7 +15,7 @@ function validateEmail(email) {
 
 /**
  * 🔒 Validate strong password format
- * Must include: 
+ * Must include:
  * - at least 8 characters
  * - one lowercase letter
  * - one uppercase letter
@@ -37,14 +37,15 @@ function isEmpty(input) {
  * (Looks for 'key' in localStorage)
  */
 function isAuth() {
+  // ✅ نحمي من السيرفر اللي مفيهوش window
   if (typeof window === 'undefined') {
-    return false; // السيرفر مفيهوش localStorage
+    return false;
   }
 
   try {
-    const token = window.localStorage?.getItem('key');
+    const token = window.localStorage.getItem('key');
     return !!token;
-  } catch {
+  } catch (e) {
     return false;
   }
 }
@@ -53,21 +54,11 @@ function isAuth() {
  * 🖼️ Optimize image URL (adds ?imgcdn=true)
  */
 function toOptimizedImage(imageUrl) {
-  // إذا القيمة غير موجودة أو ليست string
   if (!imageUrl || typeof imageUrl !== 'string') return '';
-
-  // نحمي ضد undefined أو مسارات خارجية
-  if (imageUrl?.startsWith('/') === false || imageUrl?.includes('imgcdn=true')) {
-    return imageUrl;
-  }
-
-  // نضيف imgcdn=true بشكل آمن
-  return imageUrl + (imageUrl?.includes('?') ? '&' : '?') + 'imgcdn=true';
+  if (!imageUrl.startsWith('/') || imageUrl.includes('imgcdn=true')) return imageUrl;
+  return imageUrl + (imageUrl.includes('?') ? '&' : '?') + 'imgcdn=true';
 }
 
-/**
- * 🧰 Export all helpers
- */
 export {
   isNumeric,
   validateEmail,
