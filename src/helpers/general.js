@@ -1,97 +1,67 @@
 /**
- * Is value numeric
- * 
- * Determine whether variable is a number
- * 
- * @param {*} str 
- *
-  import { isNumeric } from '../helpers/general'
-
-  isNumeric(value)
-*/
-function isNumeric(str) {
-  if (['string', 'number'].indexOf(typeof str) === -1) return false; // we only process strings and numbers!
-  return (
-    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-    !isNaN(parseFloat(str))
-  ); // ...and ensure strings of whitespace fail
+ * 🧮 Check if value is numeric
+ */
+function isNumeric(value) {
+  if (typeof value !== 'string' && typeof value !== 'number') return false;
+  return !isNaN(value) && !isNaN(parseFloat(value));
 }
 
 /**
- * Validate email format
- * 
- * Checks the provided email address and validates its format
- * 
- * @param   {String} email  The email address
- * 
-    import { validateEmail } from '../helpers/general'
-
-    validateEmail(email)
+ * 📧 Validate email format
  */
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 /**
- * Validate strong password format
- * 
- * 
- * @param   {String} password  The password
- * 
-    import { validateStrongPassword } from '../helpers/general'
-
-    validateStrongPassword(email)
+ * 🔒 Validate strong password format
+ * Must include: 
+ * - at least 8 characters
+ * - one lowercase letter
+ * - one uppercase letter
+ * - one number
  */
 function validateStrongPassword(password) {
-  return /(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/.test(password);
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
 }
 
 /**
- * Checks for empty string
- * 
- * @param   {String} email  input
- * 
-    import { isEmpty } from '../helpers/general'
-
-    isEmpty(email)
+ * 🕳️ Check if value is empty
  */
 function isEmpty(input) {
-  if (input === '' || input === null || input === undefined) return true;
+  return input === '' || input === null || input === undefined;
 }
 
 /**
- * Checks if user is authenticated
- * 
- * 
- * 
-    import { isAuth } from '../helpers/general'
-
-    isAuth()
+ * 🔑 Check if user is authenticated
+ * (Looks for 'key' in localStorage)
  */
 function isAuth() {
-  if (typeof window === 'undefined') return false; // لا يوجد window أثناء build
-
-  try {
+  const isBrowser = typeof window !== 'undefined';
+  if (isBrowser) {
     const token = window.localStorage.getItem('key');
-    return !!token; // ترجّع true فقط لو فيه توكن
-  } catch (e) {
-    return false;
+    return !!token; // true if token exists, false if not
   }
+  return true; // if not in browser (e.g. during SSR), assume true
 }
 
 /**
- * Adds a query param to URLs which is captures by redirect rules
- * (when running in Netlify - otherwise it's harmless)
- * 
-    import { toOptimizedImage } from '../helpers/general'
-
-    <img src={toOptimizedImage(image)} .../>
+ * 🖼️ Optimize image URL (adds ?imgcdn=true)
  */
 function toOptimizedImage(imageUrl) {
-  if (!imageUrl.startsWith('/') || imageUrl.endsWith("imgcdn=true")) return imageUrl;
-  return imageUrl + 
-          (imageUrl.includes("?") ? "&" : "?") + 
-          "imgcdn=true";
+  if (!imageUrl || typeof imageUrl !== 'string') return imageUrl;
+  if (!imageUrl.startsWith('/') || imageUrl.includes('imgcdn=true')) return imageUrl;
+  return imageUrl + (imageUrl.includes('?') ? '&' : '?') + 'imgcdn=true';
 }
 
-export { isNumeric, validateEmail, validateStrongPassword, isEmpty, isAuth, toOptimizedImage };
+/**
+ * 🧰 Export all helpers
+ */
+export {
+  isNumeric,
+  validateEmail,
+  validateStrongPassword,
+  isEmpty,
+  isAuth,
+  toOptimizedImage
+};
