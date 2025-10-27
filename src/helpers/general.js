@@ -69,13 +69,13 @@ function isEmpty(input) {
     isAuth()
  */
 function isAuth() {
-  const isBrowser = typeof window !== 'undefined';
-  if (isBrowser) {
+  if (typeof window === 'undefined') return false; // لا يوجد window أثناء build
+
+  try {
     const token = window.localStorage.getItem('key');
-    if (token) return true;
-    else return false;
-  } else {
-    return true;
+    return !!token; // ترجّع true فقط لو فيه توكن
+  } catch (e) {
+    return false;
   }
 }
 
